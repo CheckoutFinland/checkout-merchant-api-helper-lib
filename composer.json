@@ -1,0 +1,11 @@
+{
+    "name": "checkoutFinland/checkout-api-library",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Tommi Reinikainen",
+            "email": "tommi.reinikainen@checkout.fi"
+        }
+    ],
+    "require": {}
+}
