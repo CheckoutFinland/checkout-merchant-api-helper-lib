@@ -16,11 +16,11 @@ class Customer
         string $phone,
         string $vatId
     ) {
-        $this->email;
-        $this->firstName;
-        $this->lastName;
-        $this->phone;
-        $this->vatId;
+        $this->email = $email;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
+        $this->phone = $phone;
+        $this->vatId = $vatId;
     }
 
     public function expose(): array

@@ -16,11 +16,11 @@ class Address
         string $county,
         string $country
     ) {
-        $this->streetAddress;
-        $this->postalCode;
-        $this->city;
-        $this->county;
-        $this->country;
+        $this->streetAddress = $streetAddress;
+        $this->postalCode = $postalCode;
+        $this->city = $city;
+        $this->county = $county;
+        $this->country = $country;
     }
 
     public function expose(): array
