@@ -10,8 +10,8 @@ class RedirectUrl
         string $success,
         string $cancel
     ) {
-        $this->success;
-        $this->cancel;
+        $this->success = $success;
+        $this->cancel = $cancel;
     }
 
     public function expose(): array
