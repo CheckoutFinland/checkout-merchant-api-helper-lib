@@ -1,7 +1,7 @@
 <?php
 namespace CheckoutFinland;
 
-class Address
+class RedirectUrl
 {
     public function expose(): array
     {
