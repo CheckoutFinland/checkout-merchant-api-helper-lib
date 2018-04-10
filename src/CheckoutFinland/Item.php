@@ -18,17 +18,17 @@ class Item
     private $comission;
 
     public function __construct(
-        int $unitPrice,
-        int $units,
-        int $vatPercentage,
-        string $productCode,
-        string $deliveryDate,
-        string $description,
-        string $category,
-        int $merchant,
-        int $stamp,
-        int $reference,
-        Comission $comission
+        int $unitPrice = 0,
+        int $units = 0,
+        int $vatPercentage = 0,
+        string $productCode = "",
+        string $deliveryDate = "",
+        string $description = "",
+        string $category = "",
+        int $merchant = 0,
+        int $stamp = 0,
+        int $reference = 0,
+        Comission $comission = null
     ) {
         $this->unitPrice = $unitPrice;
         $this->units = $units;
@@ -40,7 +40,7 @@ class Item
         $this->merchant = $merchant;
         $this->stamp = $stamp;
         $this->reference = $reference;
-        $this->comission = $comission ?? new stdClass();
+        $this->comission = $comission ?? new Comission();
     }
 
     public function expose(): array

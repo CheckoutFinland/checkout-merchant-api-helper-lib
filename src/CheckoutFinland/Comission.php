@@ -7,8 +7,8 @@ class Comission
     private $amount;
 
     public function __construct(
-        int $merchant,
-        int $amount
+        int $merchant = 0,
+        int $amount = 0
     ) {
         $this->merchant = $merchant;
         $this->amount = $amount;

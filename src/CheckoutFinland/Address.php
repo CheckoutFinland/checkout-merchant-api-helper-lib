@@ -10,11 +10,11 @@ class Address
     private $country;
 
     public function __construct(
-        string $streetAddress,
-        string $postalCode,
-        string $city,
-        string $county,
-        string $country
+        string $streetAddress = "",
+        string $postalCode = "",
+        string $city = "",
+        string $county = "",
+        string $country = ""
     ) {
         $this->streetAddress = $streetAddress;
         $this->postalCode = $postalCode;

@@ -7,8 +7,8 @@ class RedirectUrl
     private $cancel;
 
     public function __construct(
-        string $success,
-        string $cancel
+        string $success = "",
+        string $cancel = ""
     ) {
         $this->success = $success;
         $this->cancel = $cancel;
