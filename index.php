@@ -10,5 +10,4 @@ use CheckoutFinland\UrlPair;
 $testMerchantId     = "3";
 $testMerchantSecret = "kissa123";
 
-$api = new Api($testMerchantId, $testMerchantSecret);
-$api->openPayment();
+$api = new Api($testMerchantId, $testMerchantSecret, "http://localhost:4001");
