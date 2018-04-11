@@ -70,7 +70,7 @@ class Api
         );
 
         // HTTP request
-        $response = \Httpful\Request::post($this->serverUrl)
+        $response = \Httpful\Request::post($this->serverUrl . "/payments")
             ->sendsJson()
             ->addHeaders(array_merge(
                 $headers,
