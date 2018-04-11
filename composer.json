@@ -10,5 +10,11 @@
     "require": {
         "php": ">= 7.0.0",
         "nategood/httpful": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "CheckoutFinland\\": "src/CheckoutFinland"
+        }
     }
+
 }
