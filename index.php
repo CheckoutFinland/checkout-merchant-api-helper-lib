@@ -7,8 +7,8 @@ use CheckoutFinland\Customer;
 use CheckoutFinland\Address;
 use CheckoutFinland\UrlPair;
 
-$testMerchantId     = "375917";
-$testMerchantSecret = "SAIPPUAKAUPPIAS";
+$testMerchantId     = "3";
+$testMerchantSecret = "kissa123";
 
 $api = new Api($testMerchantId, $testMerchantSecret);
 $api->openPayment();
