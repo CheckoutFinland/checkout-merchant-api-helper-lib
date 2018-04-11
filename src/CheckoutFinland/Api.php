@@ -25,7 +25,7 @@ class Api
         UrlPair $callbackUrls = null
     ) {
         // assert $items is an array of items?
-        arrayAll(function ($item) {
+        Api::arrayAll(function ($item) {
             return get_class($item) == "Item";
         }, $items);
 
@@ -56,6 +56,26 @@ class Api
         $body = json_encode($body);
 
         // HTTP request
+        $response = \Httpful\Request::post($this->server)
+            ->sendsJson()
+            ->addHeaders(array(
+                'checkout-account' => $this->merchantId,
+                'checkout-algorithm' => $this->algorithm,
+                'checkout-method' => 'POST',
+                'signature' => Api::calculateHMAC($headers, $body)
+            ))
+            ->body($body)
+            ->send();
+    }
+
+    private static function calculateHmac(array $headers, string $body, string $secretKey): string
+    {
+        $payload = array_map(function ($k, $v) {
+            return $k . ":" . $v;
+        }, array_keys($headers), $headers);
+        array_push($payload, $body);
+
+        return hash_hmac("sha256", join('\n', $payload), $secretKey);
     }
 
     private static function arrayAll($func, $array): bool
