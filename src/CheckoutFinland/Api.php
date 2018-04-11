@@ -31,7 +31,7 @@ class Api
         Address $invoicingAddress = null,
         UrlPair $redirectUrls = null,
         UrlPair $callbackUrls = null
-    ) {
+    ): string {
         // assert $items is an array of items?
         Api::arrayAll(function ($item) {
             return get_class($item) == "Item";
@@ -85,6 +85,8 @@ class Api
             ))
             ->body($body)
             ->send();
+
+        return $response;
     }
 
     private static function calculateHmac(

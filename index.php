@@ -11,3 +11,6 @@ $testMerchantId     = "3";
 $testMerchantSecret = "kissa123";
 
 $api = new Api($testMerchantId, $testMerchantSecret, "http://localhost:4001");
+$response = $api->openPayment();
+
+print_r($response);
