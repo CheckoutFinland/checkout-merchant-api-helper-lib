@@ -98,7 +98,7 @@ class Api
         }, array_keys($headers), $headers);
         array_push($payload, $body);
 
-        return hash_hmac($hmacAlgorithm, join('\n', $payload), $secretKey);
+        return hash_hmac($hmacAlgorithm, join("\n", $payload), $secretKey);
     }
 
     private static function arrayAll($func, $array): bool
