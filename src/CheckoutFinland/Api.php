@@ -8,10 +8,18 @@ use CheckoutFinland\UrlPair;
 
 class Api
 {
-    public function __construct(string $merchantId, string $merchantSecret)
-    {
+    private $merchantId;
+    private $merchantSecret;
+    private $serverUrl;
+
+    public function __construct(
+        string $merchantId,
+        string $merchantSecret,
+        string $serverUrl = "https://api.checkout.fi"
+    ) {
         $this->merchantId = $merchantId;
         $this->merchantSecret = $merchantSecret;
+        $this->serverUrl = $serverUrl;
     }
 
     public function openPayment(
@@ -55,27 +63,42 @@ class Api
         );
         $body = json_encode($body);
 
+        $headers = array(
+            'checkout-account' => $this->merchantId,
+            'checkout-algorithm' => $hmacAlgorithm,
+            'checkout-method' => 'POST'
+        );
+
         // HTTP request
-        $response = \Httpful\Request::post($this->server)
+        $response = \Httpful\Request::post($this->serverUrl)
             ->sendsJson()
-            ->addHeaders(array(
-                'checkout-account' => $this->merchantId,
-                'checkout-algorithm' => $this->algorithm,
-                'checkout-method' => 'POST',
-                'signature' => Api::calculateHMAC($headers, $body)
+            ->addHeaders(array_merge(
+                $headers,
+                array(
+                    'signature' => Api::calculateHMAC(
+                        $headers,
+                        $body,
+                        $this->merchantSecret,
+                        $hmacAlgorithm
+                    )
+                )
             ))
             ->body($body)
             ->send();
     }
 
-    private static function calculateHmac(array $headers, string $body, string $secretKey): string
-    {
+    private static function calculateHmac(
+        array $headers,
+        string $body,
+        string $secretKey,
+        string $hmacAlgorithm
+    ): string {
         $payload = array_map(function ($k, $v) {
             return $k . ":" . $v;
         }, array_keys($headers), $headers);
         array_push($payload, $body);
 
-        return hash_hmac("sha256", join('\n', $payload), $secretKey);
+        return hash_hmac($hmacAlgorithm, join('\n', $payload), $secretKey);
     }
 
     private static function arrayAll($func, $array): bool
