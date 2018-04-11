@@ -1,7 +1,7 @@
 <?php
 namespace CheckoutFinland;
 
-class RedirectUrl
+class UrlPair
 {
     private $success;
     private $cancel;
