@@ -50,7 +50,7 @@ class Api
         }, $items);
 
         $body = array(
-            'stamp' => '',
+            'stamp' => strval(time()),
             'reference' => '',
             'amount' => 0,
             'currency' => '',
