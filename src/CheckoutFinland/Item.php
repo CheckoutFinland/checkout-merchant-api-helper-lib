@@ -21,10 +21,10 @@ class Item
         int $unitPrice = 0,
         int $units = 0,
         int $vatPercentage = 0,
-        string $productCode = "",
-        string $deliveryDate = "",
-        string $description = "",
-        string $category = "",
+        string $productCode = '',
+        string $deliveryDate = '',
+        string $description = '',
+        string $category = '',
         int $merchant = 0,
         int $stamp = 0,
         int $reference = 0,
@@ -51,7 +51,7 @@ class Item
 
         return array_replace(
             get_object_vars($this),
-            array("comission" => $comissionData)
+            array('comission' => $comissionData)
         );
     }
 }

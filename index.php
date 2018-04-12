@@ -7,10 +7,10 @@ use CheckoutFinland\Customer;
 use CheckoutFinland\Address;
 use CheckoutFinland\UrlPair;
 
-$testMerchantId     = "3";
-$testMerchantSecret = "kissa123";
+$testMerchantId     = '3';
+$testMerchantSecret = 'kissa123';
 
-$api = new Api($testMerchantId, $testMerchantSecret, "http://localhost:4001");
+$api = new Api($testMerchantId, $testMerchantSecret, 'http://localhost:4001');
 $response = $api->openPayment();
 
 print_r($response);

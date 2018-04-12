@@ -15,7 +15,7 @@ class Api
     public function __construct(
         string $merchantId,
         string $merchantSecret,
-        string $serverUrl = "https://api.checkout.fi"
+        string $serverUrl = 'https://api.checkout.fi'
     ) {
         $this->merchantId = $merchantId;
         $this->merchantSecret = $merchantSecret;
@@ -23,8 +23,8 @@ class Api
     }
 
     public function openPayment(
-        string $hmacAlgorithm = "sha256",
-        string $httpMethod = "post",
+        string $hmacAlgorithm = 'sha256',
+        string $httpMethod = 'post',
         array $items = [],
         Customer $customer = null,
         Address $deliveryAddress = null,
@@ -34,7 +34,7 @@ class Api
     ): string {
         // assert $items is an array of items?
         Api::arrayAll(function ($item) {
-            return get_class($item) == "Item";
+            return get_class($item) == 'Item';
         }, $items);
 
         // make sure all parameter vars contain an appropriate object
@@ -50,16 +50,16 @@ class Api
         }, $items);
 
         $body = array(
-            "stamp" => 0,
-            "reference" => 0,
-            "amount" => 0,
-            "language" => "",
-            "items" => $items,
-            "customer" => $customer->expose(),
-            "deliveryAddress" => $deliveryAddress->expose(),
-            "invoicingAddress" => $invoicingAddress->expose(),
-            "redirectUrls" => $redirectUrls->expose(),
-            "callbackUrls" => $callbackUrls->expose()
+            'stamp' => 0,
+            'reference' => 0,
+            'amount' => 0,
+            'language' => '',
+            'items' => $items,
+            'customer' => $customer->expose(),
+            'deliveryAddress' => $deliveryAddress->expose(),
+            'invoicingAddress' => $invoicingAddress->expose(),
+            'redirectUrls' => $redirectUrls->expose(),
+            'callbackUrls' => $callbackUrls->expose()
         );
         $body = json_encode($body);
 
@@ -70,7 +70,7 @@ class Api
         );
 
         // HTTP request
-        $response = \Httpful\Request::post($this->serverUrl . "/payments")
+        $response = \Httpful\Request::post($this->serverUrl . '/payments')
             ->sendsJson()
             ->addHeaders(array_merge(
                 $headers,
@@ -96,7 +96,7 @@ class Api
         string $hmacAlgorithm
     ): string {
         $payload = array_map(function ($k, $v) {
-            return $k . ":" . $v;
+            return $k . ':' . $v;
         }, array_keys($headers), $headers);
         array_push($payload, $body);
 

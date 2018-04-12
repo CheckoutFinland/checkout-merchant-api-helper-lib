@@ -10,11 +10,11 @@ class Customer
     private $vatId;
 
     public function __construct(
-        string $email = "",
-        string $firstName = "",
-        string $lastName = "",
-        string $phone = "",
-        string $vatId = ""
+        string $email = '',
+        string $firstName = '',
+        string $lastName = '',
+        string $phone = '',
+        string $vatId = ''
     ) {
         $this->email = $email;
         $this->firstName = $firstName;
