@@ -50,9 +50,10 @@ class Api
         }, $items);
 
         $body = array(
-            'stamp' => 0,
-            'reference' => 0,
+            'stamp' => '',
+            'reference' => '',
             'amount' => 0,
+            'currency' => '',
             'language' => '',
             'items' => $items,
             'customer' => $customer->expose(),
