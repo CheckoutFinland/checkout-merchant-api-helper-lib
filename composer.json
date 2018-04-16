@@ -1,6 +1,7 @@
 {
     "name": "checkoutFinland/checkout-api-library",
     "type": "library",
+    "description": "Helper PHP library for integrating to the new Checkout Finland payment API",
     "authors": [
         {
             "name": "Tommi Reinikainen",
