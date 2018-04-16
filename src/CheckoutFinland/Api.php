@@ -26,15 +26,20 @@ class Api
     }
 
     public function openPayment(
-        string $hmacAlgorithm = 'sha256',
-        string $httpMethod = 'post',
-        array $items = [],
+        string   $reference,
+        int      $amount,
+        string   $currency,
+        string   $language,
+        string   $stamp = null,
+        string   $hmacAlgorithm = 'sha256',
+        string   $httpMethod = 'post',
+        array    $items = [],
         Customer $customer = null,
-        Address $deliveryAddress = null,
-        Address $invoicingAddress = null,
-        UrlPair $redirectUrls = null,
-        UrlPair $callbackUrls = null
-    ): string {
+        Address  $deliveryAddress = null,
+        Address  $invoicingAddress = null,
+        UrlPair  $redirectUrls = null,
+        UrlPair  $callbackUrls = null
+    ) {
         // assert $items is an array of items?
         Api::arrayAll(function ($item) {
             return get_class($item) == 'Item';
@@ -53,8 +58,11 @@ class Api
         }, $items);
 
         $body = array(
-            'stamp' => Uuid::uuid4(),
+            'stamp' => $stamp ?? Uuid::uuid4(),
             'reference' => $reference,
+            'amount' => $amount,
+            'currency' => $currency,
+            'language' => $language,
             'items' => $items,
             'customer' => $customer->expose(),
             'deliveryAddress' => $deliveryAddress->expose(),
