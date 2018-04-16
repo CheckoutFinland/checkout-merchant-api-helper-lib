@@ -15,6 +15,31 @@ class Api
     private $merchantSecret;
     private $serverUrl;
 
+    private const DEFAULT_PAYMENT_OPTS = array(
+        'stamp' => '',
+        'hmacAlgorithm' => 'sha256',
+        'httpMethod' => 'post',
+        'items' => [],
+        'customer' => null,
+        'deliveryAddress' => null,
+        'invoicingAddress' => null,
+        'redirectUrls' => null,
+        'callbackUrls' => null
+    );
+
+    private const MANDATORY_PAYMENT_FIELDS = array(
+        'stamp',
+        'reference',
+        'amount',
+        'language',
+        'items',
+        'customer',
+        'deliveryAddress',
+        'invoicingAddress',
+        'redirectUrls',
+        'callbackUrls'
+    );
+
     public function __construct(
         string $merchantId,
         string $merchantSecret,
@@ -30,51 +55,43 @@ class Api
         int      $amount,
         string   $currency,
         string   $language,
-        string   $stamp = null,
-        string   $hmacAlgorithm = 'sha256',
-        string   $httpMethod = 'post',
-        array    $items = [],
-        Customer $customer = null,
-        Address  $deliveryAddress = null,
-        Address  $invoicingAddress = null,
-        UrlPair  $redirectUrls = null,
-        UrlPair  $callbackUrls = null
-    ) {
+        array    $opts = []
+    ): string {
+        $opts = array_merge(
+            API::DEFAULT_PAYMENT_OPTS,
+            // default stamp to uuidv4, has to be generated outside of the const declaration
+            array('stamp' => Uuid::uuid4()),
+            $opts
+        );
+
         // assert $items is an array of items?
         Api::arrayAll(function ($item) {
             return get_class($item) == 'Item';
-        }, $items);
+        }, $opts['items']);
 
         // make sure all parameter vars contain an appropriate object
-        $customer = $customer ?? new Customer();
-        $deliveryAddress = $deliveryAddress ?? new Address();
-        $invoicingAddress = $invoicingAddress ?? new Address();
-        $redirectUrls = $redirectUrls ?? new UrlPair();
-        $callbackUrls = $callbackUrls ?? new UrlPair();
+        $opts['customer'] = $opts['customer'] ?? new Customer();
+        $opts['deliveryAddress'] = $opts['deliveryAddress'] ?? new Address();
+        $opts['invoicingAddress'] = $opts['invoicingAddress'] ?? new Address();
+        $opts['redirectUrls'] = $opts['redirectUrls'] ?? new UrlPair();
+        $opts['callbackUrls'] = $opts['callbackUrls'] ?? new UrlPair();
 
-        // map items into an array of all member variables
-        $items = array_map(function ($item) {
-            return $item->expose();
-        }, $items);
-
-        $body = array(
-            'stamp' => $stamp ?? Uuid::uuid4(),
-            'reference' => $reference,
-            'amount' => $amount,
-            'currency' => $currency,
-            'language' => $language,
-            'items' => $items,
-            'customer' => $customer->expose(),
-            'deliveryAddress' => $deliveryAddress->expose(),
-            'invoicingAddress' => $invoicingAddress->expose(),
-            'redirectUrls' => $redirectUrls->expose(),
-            'callbackUrls' => $callbackUrls->expose()
+        $body = array_merge(
+            // pick mandatory fields from $opts and map into array for easy passing to json_decode
+            Api::exposeMandatoryFields($opts),
+            // merge with the fields not passed through $opts
+            array(
+                'reference' => $reference,
+                'amount' => $amount,
+                'currency' => $currency,
+                'language' => $language,
+            )
         );
         $body = json_encode($body);
 
         $headers = array(
             'checkout-account' => $this->merchantId,
-            'checkout-algorithm' => $hmacAlgorithm,
+            'checkout-algorithm' => $opts['hmacAlgorithm'],
             'checkout-method' => 'POST'
         );
 
@@ -83,12 +100,13 @@ class Api
             ->sendsJson()
             ->addHeaders(array_merge(
                 $headers,
+                // The signature is calculated and added to the other headers
                 array(
                     'signature' => Api::calculateHMAC(
                         $headers,
                         $body,
                         $this->merchantSecret,
-                        $hmacAlgorithm
+                        $opts['hmacAlgorithm']
                     )
                 )
             ))
@@ -96,6 +114,20 @@ class Api
             ->send();
 
         return $response;
+    }
+
+    private static function exposeMandatoryFields($opts): array
+    {
+        return array_map(function ($field) {
+            if (method_exists($field, 'expose')) {
+                return $field->expose();
+            } elseif (gettype($field) == 'array') {
+                return array_map(function ($i) {
+                    $i->expose();
+                }, $field);
+            }
+            return $field;
+        }, Api::arrayPick(Api::MANDATORY_PAYMENT_FIELDS, $opts));
     }
 
     private static function calculateHmac(
