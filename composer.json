@@ -9,7 +9,8 @@
     ],
     "require": {
         "php": ">= 7.0.0",
-        "nategood/httpful": "*"
+        "nategood/httpful": "*",
+        "ramsey/uuid": "^3.7"
     },
     "autoload": {
         "psr-4": {

@@ -1,6 +1,9 @@
 <?php
 namespace CheckoutFinland;
 
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
+
 use CheckoutFinland\Item;
 use CheckoutFinland\Customer;
 use CheckoutFinland\Address;
@@ -50,11 +53,8 @@ class Api
         }, $items);
 
         $body = array(
-            'stamp' => strval(time()),
-            'reference' => '',
-            'amount' => 0,
-            'currency' => '',
-            'language' => '',
+            'stamp' => Uuid::uuid4(),
+            'reference' => $reference,
             'items' => $items,
             'customer' => $customer->expose(),
             'deliveryAddress' => $deliveryAddress->expose(),
