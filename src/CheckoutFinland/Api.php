@@ -114,11 +114,9 @@ class Api
 
     private static function arrayAll($func, $array): bool
     {
-        $conformes = array_map($func, $array);
-        $result = array_filter($conformes, function ($item) {
-            return $item;
-        });
-        return true;
+        return array_reduce($array, function ($carry, $item) use ($func) {
+            return $carry ? $func($item) : false;
+        }, true);
     }
 
     private static function arrayPick(array $keys, array $items): array
