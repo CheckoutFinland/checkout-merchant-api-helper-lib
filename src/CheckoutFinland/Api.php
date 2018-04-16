@@ -120,4 +120,11 @@ class Api
         });
         return true;
     }
+
+    private static function arrayPick(array $keys, array $items): array
+    {
+        return array_filter($items, function ($v, $k) use ($keys) {
+            return in_array($k, $keys);
+        }, ARRAY_FILTER_USE_BOTH);
+    }
 }
